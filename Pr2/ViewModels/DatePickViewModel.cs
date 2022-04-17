@@ -191,7 +191,7 @@ namespace PracticeDateHandling.ViewModels
                 IsFilled = Visibility.Hidden;
                 BirthdayMessage = "";
                 if (Birthday > DateTime.Now) throw new Exception();
-                if (Utilities.getAge(Birthday) > 135) throw new Exception();
+                if (Utilities.getAgeAsync(Birthday).Result > 135) throw new Exception();
                 Zodiac = _user.SunSign;
                 ZodiacChinese = _user.ChineseSign;
                 IsAdult = _user.IsAdult;

@@ -72,20 +72,20 @@ namespace PracticeDateHandling.Models
         }
         public string SunSign
         {
-            get { return Task.Run(() => Utilities.Zodiac(Birthday)).Result; }
+            get { return Utilities.ZodiacAsync(Birthday).Result; }
         }
 
         public string ChineseSign
         {
-            get { return Task.Run(() => Utilities.ChineseZodiac(Birthday)).Result; }
+            get { return Utilities.ChineseZodiacAsync(Birthday).Result; }
         }
 
         public bool  IsAdult
         {
             get
             {
-                var age = Task.Run(() => Utilities.getAgeAsync(Birthday));
-                return age.Result >= 18; 
+                var age = Utilities.getAgeAsync(Birthday).Result;
+                return age >= 18; 
             }
         }
 
