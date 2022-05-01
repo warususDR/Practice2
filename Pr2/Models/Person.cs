@@ -16,22 +16,22 @@ namespace PracticeDateHandling.Models
         //constructors
         public Person(string name, string surname, string email, DateTime birthday)
         {
-            _name = name;
-            _surname = surname;
-            _email = email;
-            _birthday = birthday;
+            Name = name;
+            Surname = surname;
+            Email = email;
+            Birthday = birthday;
         }
         public Person(string name, string surname, string email)
         {
-            _name = name;
-            _surname = surname;
-            _email = email;
+            Name = name;
+            Surname = surname;
+            Email = email;
         }
         public Person(string name, string surname, DateTime birthday)
         {
-            _name = name;
-            _surname = surname;
-            _birthday = birthday;
+            Name = name;
+            Surname = surname;
+            Birthday = birthday;
         }
         public Person() { }
         //getters setters
@@ -40,6 +40,7 @@ namespace PracticeDateHandling.Models
             get { return _name; }
             set
             {
+                Utilities.CheckName(value);
                 _name = value;
             }
         }
@@ -49,6 +50,7 @@ namespace PracticeDateHandling.Models
             get { return _surname; }
             set
             {
+                Utilities.CheckName(value);
                 _surname = value;
             }
         }
@@ -58,6 +60,7 @@ namespace PracticeDateHandling.Models
             get { return _email; }
             set
             {
+                Utilities.IsValidEmail(value);
                 _email = value;
             }
         }
@@ -67,6 +70,7 @@ namespace PracticeDateHandling.Models
             get { return _birthday; }
             set
             {
+                Utilities.CheckBirthday(value);
                 _birthday = value;
             }
         }

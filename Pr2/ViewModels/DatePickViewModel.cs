@@ -7,16 +7,20 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using PracticeDateHandling.Exceptions;
 
 namespace PracticeDateHandling.ViewModels
 {
     class DatePickViewModel : INotifyPropertyChanged
     {
-        private Person _user = new Person();
-
+        private Person _user;
+        //attributes
         private RelayCommand<object> _submitDateCommand;
         private RelayCommand<object> _cancelCommand;
-
+        private string _name;
+        private string _surname;
+        private string _email;
+        private DateTime _birthday;
         private string _birthdayMessage;
         private Visibility _isFilled;
         private string _zodiac;
@@ -25,11 +29,13 @@ namespace PracticeDateHandling.ViewModels
         private bool _isAdult;
         private string _displayBirthday;
         private bool _isEnabled = true;
+
+        //constructor
         public DatePickViewModel()
         {
             IsFilled = Visibility.Hidden;
         }
-
+        //modifiers for attributes
         public string BirthdayMessage
         {
             get { return _birthdayMessage; }
@@ -52,11 +58,11 @@ namespace PracticeDateHandling.ViewModels
         {
             get
             {
-                return _user.Name;
+                return _name;
             }
             set
             {
-                _user.Name = value;
+                _name = value;
                 OnPropertyChanged("Name");
             }
         }
@@ -65,11 +71,11 @@ namespace PracticeDateHandling.ViewModels
         {
             get
             {
-                return _user.Surname;
+                return _surname;
             }
             set
             {
-                _user.Surname = value;
+                _surname = value;
                 OnPropertyChanged("Surname");
             }
         }
@@ -77,17 +83,17 @@ namespace PracticeDateHandling.ViewModels
 
         public DateTime Birthday
         {
-            get { return _user.Birthday; }
-            set { _user.Birthday = value;
+            get { return _birthday; }
+            set { _birthday = value;
                 OnPropertyChanged("Birthday");
             }
         }
         public string Email
         {
-            get { return _user.Email; }
+            get { return _email; }
             set
             {
-                _user.Email = value;
+                _email = value;
                 OnPropertyChanged("Email");
             }
         }
@@ -155,7 +161,7 @@ namespace PracticeDateHandling.ViewModels
             }
         }
 
-
+        //buttons
         public RelayCommand<object> SubmitDateCommand
         {
             get
@@ -180,18 +186,18 @@ namespace PracticeDateHandling.ViewModels
         {
             return true;
         }
+        //submitDate
         private void SubmitDate()
         {
             try
             {
                 IsEnabled = false;
+                IsFilled = Visibility.Hidden;
                 //Time Consumed by Operations simulation 
                 Thread.Sleep(500);
                 //End of simulation
-                IsFilled = Visibility.Hidden;
+                _user = new Person(Name, Surname, Email, Birthday);
                 BirthdayMessage = "";
-                if (Birthday > DateTime.Now) throw new Exception();
-                if (Utilities.getAgeAsync(Birthday).Result > 135) throw new Exception();
                 Zodiac = _user.SunSign;
                 ZodiacChinese = _user.ChineseSign;
                 IsAdult = _user.IsAdult;
@@ -200,9 +206,9 @@ namespace PracticeDateHandling.ViewModels
                 if (IsBirthday) BirthdayMessage = "Happy Birthday!";
                 IsFilled = Visibility.Visible;
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Date of birth isn't entered correctly. Please enter it in format d.m.y or choose it from calendar");
+                MessageBox.Show($"Error: {ex.Message}");
             }
             finally
             {
@@ -215,6 +221,7 @@ namespace PracticeDateHandling.ViewModels
             await Task.Run(() => SubmitDate());
         }
 
+        // onPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

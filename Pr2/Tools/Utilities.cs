@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PracticeDateHandling.Exceptions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PracticeDateHandling.Tools
@@ -80,5 +82,29 @@ namespace PracticeDateHandling.Tools
         {
 			return await  Task.Run(() => ChineseZodiac(date));
         }
-    }
+
+		public static void CheckBirthday(DateTime birthday)
+        {
+			if (birthday > DateTime.Now) throw new FutureBirthdayException();
+			else if (getAgeAsync(birthday).Result > 135) throw new PastBirthdayException();
+		}
+
+		public static void IsValidEmail(string email)
+		{ 
+			try
+			{
+				var address = new System.Net.Mail.MailAddress(email);
+				if (address.Address != email) throw new IncorrectAddressException();
+			}
+			catch
+			{
+				throw new IncorrectAddressException();
+			}
+		}
+
+		public static void CheckName(string name)
+        {
+			if (!name.All(ch => char.IsLetter(ch))) throw new IncorrectNameException();
+        }
+	}
 }
